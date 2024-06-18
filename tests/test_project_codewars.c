@@ -49,6 +49,13 @@ void test_find_min_max(void) {
     CU_ASSERT_EQUAL_FATAL(min((int[1]){5}, 1), 5);
 }
 
+void test_play_digits(void) {
+    CU_ASSERT_EQUAL_FATAL(digPow(89, 1), 1);
+    CU_ASSERT_EQUAL_FATAL(digPow(92, 1), -1);
+    CU_ASSERT_EQUAL_FATAL(digPow(695, 2), 2);
+    CU_ASSERT_EQUAL_FATAL(digPow(46288, 3), 51);
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS) {
@@ -65,7 +72,8 @@ int main() {
     // Add the tests to the suite
     if (CU_add_test(suite, "test_reverse_words", test_reverse_words) == NULL ||
         CU_add_test(suite, "test_fake_binary", test_fake_binary) == NULL ||
-        CU_add_test(suite, "test_find_min_max", test_find_min_max) == NULL) {
+        CU_add_test(suite, "test_find_min_max", test_find_min_max) == NULL ||
+        CU_add_test(suite, "test_play_digits", test_play_digits) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
