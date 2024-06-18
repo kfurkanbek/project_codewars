@@ -5,7 +5,14 @@
 #include <CUnit/CUnit.h>
 #include <stdlib.h>
 
-void test_reverse_words(void) {
+static void repeat_func(void func(), unsigned int count) {
+    while (count > 0) {
+        func();
+        count--;
+    }
+}
+
+static void test_reverse_words(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(reverseWords("This is an example!"),
                                  "sihT si na !elpmaxe");
 
@@ -13,7 +20,7 @@ void test_reverse_words(void) {
                                  "elbuod  secaps");
 }
 
-void test_fake_binary(void) {
+static void test_fake_binary(void) {
     char* result = malloc(100 * sizeof(char));
 
     fakeBin("45385593107843568", result);
@@ -34,7 +41,7 @@ void test_fake_binary(void) {
     free(result);
 }
 
-void test_find_min_max(void) {
+static void test_find_min_max(void) {
     CU_ASSERT_EQUAL_FATAL(max((int[8]){4, 6, 2, 1, 9, 63, -134, 566}, 8), 566);
     CU_ASSERT_EQUAL_FATAL(min((int[8]){4, 6, 2, 1, 9, 63, -134, 566}, 8), -134);
 
@@ -49,11 +56,63 @@ void test_find_min_max(void) {
     CU_ASSERT_EQUAL_FATAL(min((int[1]){5}, 1), 5);
 }
 
-void test_play_digits(void) {
+static void test_play_digits(void) {
     CU_ASSERT_EQUAL_FATAL(digPow(89, 1), 1);
     CU_ASSERT_EQUAL_FATAL(digPow(92, 1), -1);
     CU_ASSERT_EQUAL_FATAL(digPow(695, 2), 2);
     CU_ASSERT_EQUAL_FATAL(digPow(46288, 3), 51);
+}
+
+static void test_dna_to_rna_random(void) {
+    size_t pos = -1;
+    size_t length = 10;
+    char* dna = malloc((length + 1) * sizeof(char));
+    char* rna = malloc((length + 1) * sizeof(char));
+    if (dna == NULL || rna == NULL) {
+        CU_FAIL_FATAL("cannot initialize random tests");
+    }
+    dna[length] = '\0';
+    rna[length] = '\0';
+
+    while (++pos < length) {
+        short random = rand() % 4;
+
+        switch (random) {
+        case 0:
+            dna[pos] = 'G';
+            rna[pos] = 'G';
+            break;
+        case 1:
+            dna[pos] = 'C';
+            rna[pos] = 'C';
+            break;
+        case 2:
+            dna[pos] = 'A';
+            rna[pos] = 'A';
+            break;
+        case 3:
+            dna[pos] = 'T';
+            rna[pos] = 'U';
+            break;
+        default:
+            free(dna);
+            free(rna);
+            CU_FAIL_FATAL("unexpected random value in random tests");
+        }
+    }
+
+    CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna(dna), rna);
+
+    free(dna);
+    free(rna);
+}
+
+static void test_dna_to_rna(void) {
+    CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("TTTT"), "UUUU");
+    CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GCAT"), "GCAU");
+    CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GACCGCCGCC"), "GACCGCCGCC");
+
+    repeat_func(test_dna_to_rna_random, 7);
 }
 
 int main() {
@@ -73,7 +132,8 @@ int main() {
     if (CU_add_test(suite, "test_reverse_words", test_reverse_words) == NULL ||
         CU_add_test(suite, "test_fake_binary", test_fake_binary) == NULL ||
         CU_add_test(suite, "test_find_min_max", test_find_min_max) == NULL ||
-        CU_add_test(suite, "test_play_digits", test_play_digits) == NULL) {
+        CU_add_test(suite, "test_play_digits", test_play_digits) == NULL ||
+        CU_add_test(suite, "test_dna_to_rna", test_dna_to_rna) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
