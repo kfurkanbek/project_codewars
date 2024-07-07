@@ -115,6 +115,63 @@ static void test_dna_to_rna(void) {
     repeat_func(test_dna_to_rna_random, 7);
 }
 
+static void test_count_by(void) {
+    size_t length = 5;
+    unsigned* actual = malloc(length * sizeof(unsigned));
+    unsigned* expected = NULL;
+
+    count_by(1, 5, actual);
+    expected = (unsigned[]){1, 2, 3, 4, 5};
+
+    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    count_by(3, 5, actual);
+    expected = (unsigned[]){3, 6, 9, 12, 15};
+    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    count_by(2, 5, actual);
+    expected = (unsigned[]){2, 4, 6, 8, 10};
+    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    count_by(50, 5, actual);
+    expected = (unsigned[]){50, 100, 150, 200, 250};
+    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    count_by(100, 5, actual);
+    expected = (unsigned[]){100, 200, 300, 400, 500};
+    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+}
+
+static void test_zero_fuel(void) {
+    CU_ASSERT_EQUAL_FATAL(zero_fuel(50, 25, 2), true);
+    CU_ASSERT_EQUAL_FATAL(zero_fuel(60, 30, 3), true);
+    CU_ASSERT_EQUAL_FATAL(zero_fuel(70, 25, 1), false);
+    CU_ASSERT_EQUAL_FATAL(zero_fuel(100, 25, 3), false);
+}
+
+static void test_odd_or_even(void) {
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0}, 1), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1}, 1), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){}, 0), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 5}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 3}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1023, 1, 2}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, -1, -5}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, -1, -3}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){-1023, 1, -2}, 3), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 2}, 3), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 4}, 3), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1023, 1, 3}, 3), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, -1, 2}, 3), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, -4}, 3), "odd");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){-1023, -1, 3}, 3), "odd");
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS) {
@@ -133,7 +190,10 @@ int main() {
         CU_add_test(suite, "test_fake_binary", test_fake_binary) == NULL ||
         CU_add_test(suite, "test_find_min_max", test_find_min_max) == NULL ||
         CU_add_test(suite, "test_play_digits", test_play_digits) == NULL ||
-        CU_add_test(suite, "test_dna_to_rna", test_dna_to_rna) == NULL) {
+        CU_add_test(suite, "test_dna_to_rna", test_dna_to_rna) == NULL ||
+        CU_add_test(suite, "test_count_by", test_count_by) == NULL ||
+        CU_add_test(suite, "test_zero_fuel", test_zero_fuel) == NULL ||
+        CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
