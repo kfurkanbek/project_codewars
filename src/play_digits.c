@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /**
- * @brief return n to the power of p
+ * @brief A function that returns n to the power of p
  *
  * @param n
  * @param p
