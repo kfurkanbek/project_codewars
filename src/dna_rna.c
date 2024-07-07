@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 /**
- * @brief Create a function which translates a given DNA string into RNA.
+ * @brief A function which translates a given DNA string into RNA.
  For example:
  "GCAT"  =>  "GCAU"
  *
