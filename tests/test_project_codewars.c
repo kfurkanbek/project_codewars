@@ -123,27 +123,27 @@ static void test_count_by(void) {
     count_by(1, 5, actual);
     expected = (unsigned[]){1, 2, 3, 4, 5};
 
-    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
 
     count_by(3, 5, actual);
     expected = (unsigned[]){3, 6, 9, 12, 15};
-    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
 
     count_by(2, 5, actual);
     expected = (unsigned[]){2, 4, 6, 8, 10};
-    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
 
     count_by(50, 5, actual);
     expected = (unsigned[]){50, 100, 150, 200, 250};
-    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
 
     count_by(100, 5, actual);
     expected = (unsigned[]){100, 200, 300, 400, 500};
-    CU_ASSERT_EQUAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
 }
 
@@ -172,6 +172,49 @@ static void test_odd_or_even(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){-1023, -1, 3}, 3), "odd");
 }
 
+static void test_words_to_arr(void) {
+    size_t length = 0;
+    char** actual = NULL;
+    char** expected = NULL;
+
+    length = 1;
+    actual = malloc(length * sizeof(char*));
+    words_to_array("word", actual);
+    expected = (char*[]){"word"};
+    for (size_t i = 0; i < length; i++) {
+        CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
+        CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
+    }
+
+    length = 2;
+    actual = malloc(length * sizeof(char*));
+    words_to_array("Robin Singh", actual);
+    expected = (char*[]){"Robin", "Singh"};
+    for (size_t i = 0; i < length; i++) {
+        CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
+        CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
+    }
+
+    length = 2;
+    actual = malloc(length * sizeof(char*));
+    words_to_array("a b c", actual);
+    expected = (char*[]){"a", "b", "c"};
+    for (size_t i = 0; i < length; i++) {
+        CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
+        CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
+    }
+
+    length = 2;
+    actual = malloc(length * sizeof(char*));
+    words_to_array("I love arrays they are my favorite", actual);
+    expected =
+        (char*[]){"I", "love", "arrays", "they", "are", "my", "favorite"};
+    for (size_t i = 0; i < length; i++) {
+        CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
+        CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
+    }
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS) {
@@ -193,7 +236,8 @@ int main() {
         CU_add_test(suite, "test_dna_to_rna", test_dna_to_rna) == NULL ||
         CU_add_test(suite, "test_count_by", test_count_by) == NULL ||
         CU_add_test(suite, "test_zero_fuel", test_zero_fuel) == NULL ||
-        CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL) {
+        CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL ||
+        CU_add_test(suite, "test_words_to_arr", test_words_to_arr) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }

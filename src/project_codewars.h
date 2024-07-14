@@ -1,3 +1,4 @@
+#include "convert_string_arr.h"
 #include "count_by_x.h"
 #include "dna_rna.h"
 #include "fake_binary.h"
