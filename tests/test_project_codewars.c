@@ -195,7 +195,7 @@ static void test_words_to_arr(void) {
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
 
-    length = 2;
+    length = 3;
     actual = malloc(length * sizeof(char*));
     words_to_array("a b c", actual);
     expected = (char*[]){"a", "b", "c"};
@@ -204,7 +204,7 @@ static void test_words_to_arr(void) {
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
 
-    length = 2;
+    length = 72;
     actual = malloc(length * sizeof(char*));
     words_to_array("I love arrays they are my favorite", actual);
     expected =
