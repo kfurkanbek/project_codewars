@@ -1,6 +1,7 @@
 #include "convert_string_arr.h"
 #include "count_by_x.h"
 #include "dna_rna.h"
+#include "equal_sides.h"
 #include "fake_binary.h"
 #include "find_min_max.h"
 #include "odd_even.h"

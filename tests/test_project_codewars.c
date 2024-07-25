@@ -63,7 +63,7 @@ static void test_play_digits(void) {
     CU_ASSERT_EQUAL_FATAL(digPow(46288, 3), 51);
 }
 
-static void test_dna_to_rna_random(void) {
+static void test_dna_rna_random(void) {
     size_t pos = -1;
     size_t length = 10;
     char* dna = malloc((length + 1) * sizeof(char));
@@ -105,15 +105,15 @@ static void test_dna_to_rna_random(void) {
     free(rna);
 }
 
-static void test_dna_to_rna(void) {
+static void test_dna_rna(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("TTTT"), "UUUU");
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GCAT"), "GCAU");
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GACCGCCGCC"), "GACCGCCGCC");
 
-    repeat_func(test_dna_to_rna_random, 7);
+    repeat_func(test_dna_rna_random, 7);
 }
 
-static void test_count_by(void) {
+static void test_count_by_x(void) {
     size_t length = 5;
     unsigned* actual = malloc(length * sizeof(unsigned));
     unsigned* expected = NULL;
@@ -147,14 +147,14 @@ static void test_count_by(void) {
     free(actual);
 }
 
-static void test_zero_fuel(void) {
+static void test_will_you_make(void) {
     CU_ASSERT_EQUAL_FATAL(zero_fuel(50, 25, 2), true);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(60, 30, 3), true);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(70, 25, 1), false);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(100, 25, 3), false);
 }
 
-static void test_odd_or_even(void) {
+static void test_odd_even(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0}, 1), "even");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1}, 1), "odd");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){}, 0), "even");
@@ -172,7 +172,7 @@ static void test_odd_or_even(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){-1023, -1, 3}, 3), "odd");
 }
 
-static void test_words_to_arr(void) {
+static void test_cnvrt_str_arr(void) {
     size_t length = 0;
     char** actual = malloc(length * sizeof(char*));
     char** expected = NULL;
@@ -292,6 +292,29 @@ static void test_rgb_to_hex(void) {
     free(actual);
 }
 
+static void test_equal_sides(void) {
+    CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){1, 2, 3, 4, 3, 2, 1}, 7), 3);
+
+    CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){1, 100, 50, -51, 1, 1}, 6),
+                          1);
+
+    CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){1, 2, 3, 4, 5, 6}, 6), -1);
+
+    CU_ASSERT_EQUAL_FATAL(
+        find_even_index((int[]){20, 10, 30, 10, 10, 15, 35}, 7), 3);
+
+    CU_ASSERT_EQUAL_FATAL(
+        find_even_index((int[]){20, 10, -80, 10, 10, 15, 35}, 7), 0);
+
+    CU_ASSERT_EQUAL_FATAL(
+        find_even_index((int[]){10, -80, 10, 10, 15, 35, 20}, 7), 6);
+
+    CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){0, 0, 0, 0, 0}, 5), 0);
+
+    CU_ASSERT_EQUAL_FATAL(
+        find_even_index((int[]){-1, -2, -3, -4, -3, -2, -1}, 7), 3);
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS) {
@@ -306,17 +329,18 @@ int main() {
     }
 
     // Add the tests to the suite
-    if (CU_add_test(suite, "test_reverse_words", test_reverse_words) == NULL ||
-        CU_add_test(suite, "test_fake_binary", test_fake_binary) == NULL ||
-        CU_add_test(suite, "test_find_min_max", test_find_min_max) == NULL ||
-        CU_add_test(suite, "test_play_digits", test_play_digits) == NULL ||
-        CU_add_test(suite, "test_dna_to_rna", test_dna_to_rna) == NULL ||
-        CU_add_test(suite, "test_count_by", test_count_by) == NULL ||
-        CU_add_test(suite, "test_zero_fuel", test_zero_fuel) == NULL ||
-        CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL ||
-        CU_add_test(suite, "test_words_to_arr", test_words_to_arr) == NULL ||
-        CU_add_test(suite, "test_rev_seq", test_rev_seq) == NULL ||
-        CU_add_test(suite, "test_rgb_to_hex", test_rgb_to_hex) == NULL) {
+    if (CU_add_test(suite, "reverse_words", test_reverse_words) == NULL ||
+        CU_add_test(suite, "fake_binary", test_fake_binary) == NULL ||
+        CU_add_test(suite, "find_min_max", test_find_min_max) == NULL ||
+        CU_add_test(suite, "play_digits", test_play_digits) == NULL ||
+        CU_add_test(suite, "dna_rna", test_dna_rna) == NULL ||
+        CU_add_test(suite, "count_by_x", test_count_by_x) == NULL ||
+        CU_add_test(suite, "will_you_make", test_will_you_make) == NULL ||
+        CU_add_test(suite, "odd_even", test_odd_even) == NULL ||
+        CU_add_test(suite, "convert_string_arr", test_cnvrt_str_arr) == NULL ||
+        CU_add_test(suite, "reversed_sequence", test_rev_seq) == NULL ||
+        CU_add_test(suite, "rgb_to_hex", test_rgb_to_hex) == NULL ||
+        CU_add_test(suite, "equal_sides", test_equal_sides) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
