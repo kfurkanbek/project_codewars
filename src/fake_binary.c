@@ -9,22 +9,29 @@ string.
  * @param digits
  * @param binary
  */
-void fakeBin(const char* digits, char* binary) {
+void fakeBin(const char* digits, char* binary)
+{
     size_t digits_l = -1;
-    while (digits[++digits_l] != '\0') {
+    while (digits[++digits_l] != '\0')
+    {
     }
     binary[digits_l] = '\0';
 
-    for (size_t i = 0; i < digits_l; i++) {
+    for (size_t i = 0; i < digits_l; i++)
+    {
 
-        if (digits[i] < '0' || '9' < digits[i]) {
+        if (digits[i] < '0' || '9' < digits[i])
+        {
             binary[i] = digits[i];
             continue;
         }
 
-        if (digits[i] < '5') {
+        if (digits[i] < '5')
+        {
             binary[i] = '0';
-        } else {
+        }
+        else
+        {
             binary[i] = '1';
         }
     }

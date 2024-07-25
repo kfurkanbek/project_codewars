@@ -8,13 +8,16 @@
  * @param p
  * @return int
  */
-static int _power(int n, int p) {
-    if (p < 0) {
+static int _power(int n, int p)
+{
+    if (p < 0)
+    {
         return 0;
     }
 
     int result = 1;
-    while (p > 0) {
+    while (p > 0)
+    {
         result *= n;
         p--;
     }
@@ -35,34 +38,40 @@ static int _power(int n, int p) {
  * @param p
  * @return int
  */
-int digPow(int n, int p) {
+int digPow(int n, int p)
+{
 
     char* buff = malloc(100 * sizeof(char));
-    if (buff == NULL) {
+    if (buff == NULL)
+    {
         return -1;
     }
     buff[99] = '\0';
 
     int ret = snprintf(buff, 100, "%d", n);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         free(buff);
         return -1;
     }
 
-    int sum = 0;
-    short i = -1;
-    while (buff[++i] != '\0') {
-        if (buff[i] == '-') {
+    int   sum = 0;
+    short i   = -1;
+    while (buff[++i] != '\0')
+    {
+        if (buff[i] == '-')
+        {
             continue;
         }
 
-        int digit = buff[i] - '0';
-        sum += _power(digit, p);
+        int digit  = buff[i] - '0';
+        sum       += _power(digit, p);
         p++;
     }
     free(buff);
 
-    if (sum % n != 0) {
+    if (sum % n != 0)
+    {
         return -1;
     }
 

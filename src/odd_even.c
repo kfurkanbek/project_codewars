@@ -8,9 +8,11 @@ determines whether the sum of its elements is odd or even.
  * @param sz
  * @return const char*
  */
-const char* odd_or_even(const int* v, size_t sz) {
+const char* odd_or_even(const int* v, size_t sz)
+{
     int sum = 0;
-    for (size_t i = 0; i < sz; i++) {
+    for (size_t i = 0; i < sz; i++)
+    {
         sum += v[i];
     }
 

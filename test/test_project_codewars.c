@@ -5,14 +5,17 @@
 #include <CUnit/CUnit.h>
 #include <stdlib.h>
 
-static void repeat_func(void func(), unsigned int count) {
-    while (count > 0) {
+static void repeat_func(void func(void), unsigned int count)
+{
+    while (count > 0)
+    {
         func();
         count--;
     }
 }
 
-static void test_reverse_words(void) {
+static void test_reverse_words(void)
+{
     CU_ASSERT_STRING_EQUAL_FATAL(reverseWords("This is an example!"),
                                  "sihT si na !elpmaxe");
 
@@ -20,7 +23,8 @@ static void test_reverse_words(void) {
                                  "elbuod  secaps");
 }
 
-static void test_fake_binary(void) {
+static void test_fake_binary(void)
+{
     char* result = malloc(100 * sizeof(char));
 
     fakeBin("45385593107843568", result);
@@ -41,7 +45,8 @@ static void test_fake_binary(void) {
     free(result);
 }
 
-static void test_find_min_max(void) {
+static void test_find_min_max(void)
+{
     CU_ASSERT_EQUAL_FATAL(max((int[8]){4, 6, 2, 1, 9, 63, -134, 566}, 8), 566);
     CU_ASSERT_EQUAL_FATAL(min((int[8]){4, 6, 2, 1, 9, 63, -134, 566}, 8), -134);
 
@@ -56,28 +61,37 @@ static void test_find_min_max(void) {
     CU_ASSERT_EQUAL_FATAL(min((int[1]){5}, 1), 5);
 }
 
-static void test_play_digits(void) {
+static void test_play_digits(void)
+{
     CU_ASSERT_EQUAL_FATAL(digPow(89, 1), 1);
     CU_ASSERT_EQUAL_FATAL(digPow(92, 1), -1);
     CU_ASSERT_EQUAL_FATAL(digPow(695, 2), 2);
     CU_ASSERT_EQUAL_FATAL(digPow(46288, 3), 51);
 }
 
-static void test_dna_rna_random(void) {
-    size_t pos = -1;
+static void test_dna_rna_random(void)
+{
+    size_t pos    = -1;
     size_t length = 10;
-    char* dna = malloc((length + 1) * sizeof(char));
-    char* rna = malloc((length + 1) * sizeof(char));
-    if (dna == NULL || rna == NULL) {
+    char*  dna    = malloc((length + 1) * sizeof(char));
+    char*  rna    = malloc((length + 1) * sizeof(char));
+    if (dna == NULL || rna == NULL)
+    {
+        free(dna);
+        free(rna);
+
         CU_FAIL_FATAL("cannot initialize random tests");
+        return;
     }
     dna[length] = '\0';
     rna[length] = '\0';
 
-    while (++pos < length) {
+    while (++pos < length)
+    {
         short random = rand() % 4;
 
-        switch (random) {
+        switch (random)
+        {
         case 0:
             dna[pos] = 'G';
             rna[pos] = 'G';
@@ -105,7 +119,8 @@ static void test_dna_rna_random(void) {
     free(rna);
 }
 
-static void test_dna_rna(void) {
+static void test_dna_rna(void)
+{
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("TTTT"), "UUUU");
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GCAT"), "GCAU");
     CU_ASSERT_STRING_EQUAL_FATAL(dna_to_rna("GACCGCCGCC"), "GACCGCCGCC");
@@ -113,9 +128,10 @@ static void test_dna_rna(void) {
     repeat_func(test_dna_rna_random, 7);
 }
 
-static void test_count_by_x(void) {
-    size_t length = 5;
-    unsigned* actual = malloc(length * sizeof(unsigned));
+static void test_count_by_x(void)
+{
+    size_t    length   = 5;
+    unsigned* actual   = malloc(length * sizeof(unsigned));
     unsigned* expected = NULL;
 
     count_by(1, 5, actual);
@@ -147,17 +163,19 @@ static void test_count_by_x(void) {
     free(actual);
 }
 
-static void test_will_you_make(void) {
+static void test_will_you_make(void)
+{
     CU_ASSERT_EQUAL_FATAL(zero_fuel(50, 25, 2), true);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(60, 30, 3), true);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(70, 25, 1), false);
     CU_ASSERT_EQUAL_FATAL(zero_fuel(100, 25, 3), false);
 }
 
-static void test_odd_even(void) {
+static void test_odd_even(void)
+{
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0}, 1), "even");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1}, 1), "odd");
-    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){}, 0), "even");
+    CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even(NULL, 0), "even");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 5}, 3), "even");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){0, 1, 3}, 3), "even");
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){1023, 1, 2}, 3), "even");
@@ -172,16 +190,18 @@ static void test_odd_even(void) {
     CU_ASSERT_STRING_EQUAL_FATAL(odd_or_even((int[]){-1023, -1, 3}, 3), "odd");
 }
 
-static void test_cnvrt_str_arr(void) {
-    size_t length = 0;
-    char** actual = malloc(length * sizeof(char*));
+static void test_cnvrt_str_arr(void)
+{
+    size_t length   = 1;
+    char** actual   = malloc(length * sizeof(char*));
     char** expected = NULL;
 
     length = 1;
     actual = realloc(actual, length * sizeof(char*));
     words_to_array("word", actual);
     expected = (char*[]){"word"};
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++)
+    {
         CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
@@ -190,7 +210,8 @@ static void test_cnvrt_str_arr(void) {
     actual = realloc(actual, length * sizeof(char*));
     words_to_array("Robin Singh", actual);
     expected = (char*[]){"Robin", "Singh"};
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++)
+    {
         CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
@@ -199,7 +220,8 @@ static void test_cnvrt_str_arr(void) {
     actual = realloc(actual, length * sizeof(char*));
     words_to_array("a b c", actual);
     expected = (char*[]){"a", "b", "c"};
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++)
+    {
         CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
@@ -209,7 +231,8 @@ static void test_cnvrt_str_arr(void) {
     words_to_array("I love arrays they are my favorite", actual);
     expected =
         (char*[]){"I", "love", "arrays", "they", "are", "my", "favorite"};
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++)
+    {
         CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
@@ -217,16 +240,18 @@ static void test_cnvrt_str_arr(void) {
     free(actual);
 }
 
-static void test_rev_seq_random(void) {
-    size_t max = 1000;
-    size_t random = 0;
-    unsigned short* actual = NULL;
+static void test_rev_seq_random(void)
+{
+    size_t          max      = 1000;
+    size_t          random   = 0;
+    unsigned short* actual   = NULL;
     unsigned short* expected = NULL;
 
-    random = (rand() % max) + 1;
-    actual = reverse_seq(random);
+    random   = (rand() % max) + 1;
+    actual   = reverse_seq(random);
     expected = malloc(random * sizeof(unsigned short));
-    for (size_t i = 0; i < random; i++) {
+    for (size_t i = 0; i < random; i++)
+    {
         expected[i] = random - i;
     }
     CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
@@ -236,23 +261,24 @@ static void test_rev_seq_random(void) {
     free(expected);
 }
 
-static void test_rev_seq(void) {
-    unsigned short* actual = NULL;
+static void test_rev_seq(void)
+{
+    unsigned short* actual   = NULL;
     unsigned short* expected = NULL;
 
-    actual = reverse_seq(1);
+    actual   = reverse_seq(1);
     expected = (unsigned short[]){1};
     CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
     free(actual);
 
-    actual = reverse_seq(5);
+    actual   = reverse_seq(5);
     expected = (unsigned short[]){5, 4, 3, 2, 1};
     CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
     free(actual);
 
-    actual = reverse_seq(0);
+    actual   = reverse_seq(0);
     expected = (unsigned short[]){0};
     CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
@@ -261,8 +287,9 @@ static void test_rev_seq(void) {
     repeat_func(test_rev_seq_random, 7);
 }
 
-static void test_rgb_to_hex(void) {
-    char* actual = malloc((6 + 1) * sizeof(char));
+static void test_rgb_to_hex(void)
+{
+    char* actual   = malloc((6 + 1) * sizeof(char));
     char* expected = NULL;
 
     rgb(255, 255, 255, actual);
@@ -292,7 +319,8 @@ static void test_rgb_to_hex(void) {
     free(actual);
 }
 
-static void test_equal_sides(void) {
+static void test_equal_sides(void)
+{
     CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){1, 2, 3, 4, 3, 2, 1}, 7), 3);
 
     CU_ASSERT_EQUAL_FATAL(find_even_index((int[]){1, 100, 50, -51, 1, 1}, 6),
@@ -315,15 +343,18 @@ static void test_equal_sides(void) {
         find_even_index((int[]){-1, -2, -3, -4, -3, -2, -1}, 7), 3);
 }
 
-int main() {
+int main(void)
+{
     // Initialize the CUnit test registry
-    if (CU_initialize_registry() != CUE_SUCCESS) {
+    if (CU_initialize_registry() != CUE_SUCCESS)
+    {
         return CU_get_error();
     }
 
     // Add a suite to the registry
     CU_pSuite suite = CU_add_suite("project_codewars", NULL, NULL);
-    if (suite == NULL) {
+    if (suite == NULL)
+    {
         CU_cleanup_registry();
         return CU_get_error();
     }
@@ -340,7 +371,8 @@ int main() {
         CU_add_test(suite, "convert_string_arr", test_cnvrt_str_arr) == NULL ||
         CU_add_test(suite, "reversed_sequence", test_rev_seq) == NULL ||
         CU_add_test(suite, "rgb_to_hex", test_rgb_to_hex) == NULL ||
-        CU_add_test(suite, "equal_sides", test_equal_sides) == NULL) {
+        CU_add_test(suite, "equal_sides", test_equal_sides) == NULL)
+    {
         CU_cleanup_registry();
         return CU_get_error();
     }

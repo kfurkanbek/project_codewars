@@ -10,6 +10,7 @@ if it is possible to get to the pump or not.
  * @return true
  * @return false
  */
-bool zero_fuel(double distance_to_pump, double mpg, double fuel_left) {
+bool zero_fuel(double distance_to_pump, double mpg, double fuel_left)
+{
     return (distance_to_pump / mpg) <= fuel_left ? true : false;
 }

@@ -8,12 +8,15 @@ the lowest number in that list, respectively.
  * @param arrayLength
  * @return int
  */
-int min(int* array, int arrayLength) {
+int min(int* array, int arrayLength)
+{
 
     int result = INT_MAX;
-    for (int i = 0; i < arrayLength; i++) {
+    for (int i = 0; i < arrayLength; i++)
+    {
 
-        if (result <= array[i]) {
+        if (result <= array[i])
+        {
             continue;
         }
 
@@ -31,12 +34,15 @@ the largest number in that list, respectively.
  * @param arrayLength
  * @return int
  */
-int max(int* array, int arrayLength) {
+int max(int* array, int arrayLength)
+{
 
     int result = INT_MIN;
-    for (int i = 0; i < arrayLength; i++) {
+    for (int i = 0; i < arrayLength; i++)
+    {
 
-        if (result >= array[i]) {
+        if (result >= array[i])
+        {
             continue;
         }
 

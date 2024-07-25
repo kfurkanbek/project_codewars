@@ -31,8 +31,12 @@
 #define CU_VERBOSE(actual, expected)                                           \
     {                                                                          \
         char* buffer = malloc(CU_BUFFER_SIZE * sizeof(char));                  \
-        snprintf(buffer, CU_BUFFER_SIZE, "CU_VERBOSE(%s (%s), %s)",            \
-                 "" #actual "", actual, "" #expected "");                      \
+        snprintf(buffer,                                                       \
+                 CU_BUFFER_SIZE,                                               \
+                 "CU_VERBOSE(%s (%s), %s)",                                    \
+                 "" #actual "",                                                \
+                 actual,                                                       \
+                 "" #expected "");                                             \
         printf("\n%s\n", buffer);                                              \
         free(buffer);                                                          \
     }

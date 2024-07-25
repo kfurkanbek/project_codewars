@@ -7,15 +7,19 @@
  * @param length
  * @return int
  */
-int find_even_index(const int* values, int length) {
+int find_even_index(const int* values, int length)
+{
     int sum = 0;
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++)
+    {
         sum += values[i];
     }
 
     int half_sum = 0;
-    for (int i = 0; i < length; i++) {
-        if ((sum - values[i] - half_sum) == half_sum) {
+    for (int i = 0; i < length; i++)
+    {
+        if ((sum - values[i] - half_sum) == half_sum)
+        {
             return i;
         }
 
