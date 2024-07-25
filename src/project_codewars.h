@@ -7,4 +7,5 @@
 #include "play_digits.h"
 #include "reverse_words.h"
 #include "reversed_sequence.h"
+#include "rgb_to_hex.h"
 #include "will_you_make.h"

@@ -261,6 +261,37 @@ static void test_rev_seq(void) {
     repeat_func(test_rev_seq_random, 7);
 }
 
+static void test_rgb_to_hex(void) {
+    char* actual = malloc((6 + 1) * sizeof(char));
+    char* expected = NULL;
+
+    rgb(255, 255, 255, actual);
+    expected = "FFFFFF";
+
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    rgb(255, 255, 300, actual);
+    expected = "FFFFFF";
+
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    rgb(0, 0, 0, actual);
+    expected = "000000";
+
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    rgb(148, 0, 211, actual);
+    expected = "9400D3";
+
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    free(actual);
+}
+
 int main() {
     // Initialize the CUnit test registry
     if (CU_initialize_registry() != CUE_SUCCESS) {
@@ -284,7 +315,8 @@ int main() {
         CU_add_test(suite, "test_zero_fuel", test_zero_fuel) == NULL ||
         CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL ||
         CU_add_test(suite, "test_words_to_arr", test_words_to_arr) == NULL ||
-        CU_add_test(suite, "test_rev_seq", test_rev_seq) == NULL) {
+        CU_add_test(suite, "test_rev_seq", test_rev_seq) == NULL ||
+        CU_add_test(suite, "test_rgb_to_hex", test_rgb_to_hex) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }
