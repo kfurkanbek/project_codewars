@@ -5,34 +5,34 @@ AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
-  Enabled:         false
+  Enabled:         true #default false
   AcrossEmptyLines: false
-  AcrossComments:  false
-  AlignCompound:   false
+  AcrossComments:  true #default false
+  AlignCompound:   true #default false
   PadOperators:    true
 AlignConsecutiveBitFields:
-  Enabled:         false
+  Enabled:         true #default false
   AcrossEmptyLines: false
-  AcrossComments:  false
-  AlignCompound:   false
-  PadOperators:    false
+  AcrossComments:  true #default false
+  AlignCompound:   true #default false
+  PadOperators:    true #default false
 AlignConsecutiveDeclarations:
-  Enabled:         false
+  Enabled:         true #default false
   AcrossEmptyLines: false
-  AcrossComments:  false
-  AlignCompound:   false
-  PadOperators:    false
+  AcrossComments:  true #default false
+  AlignCompound:   true #default false
+  PadOperators:    true #default false
 AlignConsecutiveMacros:
-  Enabled:         false
+  Enabled:         true #default false
   AcrossEmptyLines: false
-  AcrossComments:  false
-  AlignCompound:   false
-  PadOperators:    false
+  AcrossComments:  true #default false
+  AlignCompound:   true #default false
+  PadOperators:    true #default false
 AlignConsecutiveShortCaseStatements:
-  Enabled:         false
+  Enabled:         true #default false
   AcrossEmptyLines: false
-  AcrossComments:  false
-  AlignCaseColons: false
+  AcrossComments:  true #default false
+  AlignCaseColons: true #default false
 AlignEscapedNewlines: Right
 AlignOperands:   Align
 AlignTrailingComments:
@@ -53,8 +53,8 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: MultiLine
 AttributeMacros:
   - __capability
-BinPackArguments: true
-BinPackParameters: true
+BinPackArguments: false #default true
+BinPackParameters: false #default true
 BitFieldColonSpacing: Both
 BraceWrapping:
   AfterCaseLabel:  false
@@ -80,7 +80,7 @@ BreakAfterJavaFieldAnnotations: false
 BreakArrays:     true
 BreakBeforeBinaryOperators: None
 BreakBeforeConceptDeclarations: Always
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Allman #default Attach
 BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
@@ -127,7 +127,7 @@ IndentExternBlock: AfterExternBlock
 IndentGotoLabels: true
 IndentPPDirectives: None
 IndentRequiresClause: true
-IndentWidth:     4
+IndentWidth:     4 #default 2
 IndentWrappedFunctionNames: false
 InsertBraces:    false
 InsertNewlineAtEOF: false
@@ -165,7 +165,7 @@ PenaltyBreakTemplateDeclaration: 10
 PenaltyExcessCharacter: 1000000
 PenaltyIndentedWhitespace: 0
 PenaltyReturnTypeOnItsOwnLine: 60
-PointerAlignment: Left
+PointerAlignment: Left #default Right
 PPIndentWidth:   -1
 QualifierAlignment: Leave
 ReferenceAlignment: Pointer
@@ -233,4 +233,3 @@ WhitespaceSensitiveMacros:
   - PP_STRINGIZE
   - STRINGIZE
 ...
-
