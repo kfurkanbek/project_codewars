@@ -95,8 +95,6 @@ static void test_dna_to_rna_random(void) {
             rna[pos] = 'U';
             break;
         default:
-            free(dna);
-            free(rna);
             CU_FAIL_FATAL("unexpected random value in random tests");
         }
     }
@@ -145,6 +143,8 @@ static void test_count_by(void) {
     expected = (unsigned[]){100, 200, 300, 400, 500};
     CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
     CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    free(actual);
 }
 
 static void test_zero_fuel(void) {
@@ -174,11 +174,11 @@ static void test_odd_or_even(void) {
 
 static void test_words_to_arr(void) {
     size_t length = 0;
-    char** actual = NULL;
+    char** actual = malloc(length * sizeof(char*));
     char** expected = NULL;
 
     length = 1;
-    actual = malloc(length * sizeof(char*));
+    actual = realloc(actual, length * sizeof(char*));
     words_to_array("word", actual);
     expected = (char*[]){"word"};
     for (size_t i = 0; i < length; i++) {
@@ -187,7 +187,7 @@ static void test_words_to_arr(void) {
     }
 
     length = 2;
-    actual = malloc(length * sizeof(char*));
+    actual = realloc(actual, length * sizeof(char*));
     words_to_array("Robin Singh", actual);
     expected = (char*[]){"Robin", "Singh"};
     for (size_t i = 0; i < length; i++) {
@@ -196,7 +196,7 @@ static void test_words_to_arr(void) {
     }
 
     length = 3;
-    actual = malloc(length * sizeof(char*));
+    actual = realloc(actual, length * sizeof(char*));
     words_to_array("a b c", actual);
     expected = (char*[]){"a", "b", "c"};
     for (size_t i = 0; i < length; i++) {
@@ -204,8 +204,8 @@ static void test_words_to_arr(void) {
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
 
-    length = 72;
-    actual = malloc(length * sizeof(char*));
+    length = 7;
+    actual = realloc(actual, length * sizeof(char*));
     words_to_array("I love arrays they are my favorite", actual);
     expected =
         (char*[]){"I", "love", "arrays", "they", "are", "my", "favorite"};
@@ -213,6 +213,52 @@ static void test_words_to_arr(void) {
         CU_ASSERT_EQUAL_FATAL(sizeof(actual[i]), sizeof(expected[i]));
         CU_ASSERT_STRING_EQUAL_FATAL(actual[i], expected[i]);
     }
+
+    free(actual);
+}
+
+static void test_rev_seq_random(void) {
+    size_t max = 1000;
+    size_t random = 0;
+    unsigned short* actual = NULL;
+    unsigned short* expected = NULL;
+
+    random = (rand() % max) + 1;
+    actual = reverse_seq(random);
+    expected = malloc(random * sizeof(unsigned short));
+    for (size_t i = 0; i < random; i++) {
+        expected[i] = random - i;
+    }
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+
+    free(actual);
+    free(expected);
+}
+
+static void test_rev_seq(void) {
+    unsigned short* actual = NULL;
+    unsigned short* expected = NULL;
+
+    actual = reverse_seq(1);
+    expected = (unsigned short[]){1};
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+    free(actual);
+
+    actual = reverse_seq(5);
+    expected = (unsigned short[]){5, 4, 3, 2, 1};
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+    free(actual);
+
+    actual = reverse_seq(0);
+    expected = (unsigned short[]){0};
+    CU_ASSERT_EQUAL_FATAL(sizeof(actual), sizeof(expected));
+    CU_ASSERT_STRING_EQUAL_FATAL(actual, expected);
+    free(actual);
+
+    repeat_func(test_rev_seq_random, 7);
 }
 
 int main() {
@@ -237,7 +283,8 @@ int main() {
         CU_add_test(suite, "test_count_by", test_count_by) == NULL ||
         CU_add_test(suite, "test_zero_fuel", test_zero_fuel) == NULL ||
         CU_add_test(suite, "test_odd_or_even", test_odd_or_even) == NULL ||
-        CU_add_test(suite, "test_words_to_arr", test_words_to_arr) == NULL) {
+        CU_add_test(suite, "test_words_to_arr", test_words_to_arr) == NULL ||
+        CU_add_test(suite, "test_rev_seq", test_rev_seq) == NULL) {
         CU_cleanup_registry();
         return CU_get_error();
     }

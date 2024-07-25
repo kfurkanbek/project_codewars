@@ -6,4 +6,5 @@
 #include "odd_even.h"
 #include "play_digits.h"
 #include "reverse_words.h"
+#include "reversed_sequence.h"
 #include "will_you_make.h"
