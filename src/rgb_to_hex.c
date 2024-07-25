@@ -9,10 +9,14 @@
  * @param hex
  * @param len
  */
-static void unsigned_digit_to_char_hex(int n, char* hex, size_t len) {
-    if (n < 0) {
+static void unsigned_digit_to_char_hex(int n, char* hex, size_t len)
+{
+    if (n < 0)
+    {
         n = 0;
-    } else if (n > 255) {
+    }
+    else if (n > 255)
+    {
         n = 255;
     }
 
@@ -28,9 +32,11 @@ static void unsigned_digit_to_char_hex(int n, char* hex, size_t len) {
  * @param b
  * @param hex
  */
-void rgb(int r, int g, int b, char hex[6 + 1]) {
+void rgb(int r, int g, int b, char hex[6 + 1])
+{
     char* buff = malloc((2 + 1) * sizeof(char));
-    if (buff == NULL) {
+    if (buff == NULL)
+    {
         hex[0] = '\0';
         return;
     }
@@ -48,5 +54,7 @@ void rgb(int r, int g, int b, char hex[6 + 1]) {
     hex[5] = buff[1];
 
     hex[6] = '\0';
+    free(buff);
+
     return;
 }

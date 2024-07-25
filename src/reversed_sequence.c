@@ -6,23 +6,29 @@
  * @param num
  * @return unsigned*
  */
-unsigned short* reverse_seq(unsigned short num) {
+unsigned short* reverse_seq(unsigned short num)
+{
     unsigned short* seq = malloc(1 * sizeof(unsigned short));
-    if (seq == NULL) {
+    if (seq == NULL)
+    {
         return NULL;
     }
     seq[0] = 0;
 
-    if (num == 0) {
+    if (num == 0)
+    {
         return seq;
     }
+    free(seq);
 
     seq = malloc(num * sizeof(unsigned short));
-    if (seq == NULL) {
+    if (seq == NULL)
+    {
         return NULL;
     }
 
-    for (unsigned short i = 0; i < num; i++) {
+    for (unsigned short i = 0; i < num; i++)
+    {
         seq[i] = num - i;
     }
 

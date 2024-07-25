@@ -18,4 +18,4 @@ There will only be letters and spaces in the input string.
 */
 
 size_t count_words(const char* words);
-void words_to_array(const char* words, char* words_array[]);
+void   words_to_array(const char* words, char* words_array[]);
