@@ -377,6 +377,10 @@ int main(void)
         return CU_get_error();
     }
 
+    // Set the output base filename
+    // (CUnit will append "-Results.xml" and "-Listing.xml")
+    CU_set_output_filename("report/CUnitAutomated");
+
     // Run the tests using the basic interface
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
