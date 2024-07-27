@@ -4,11 +4,12 @@ PROJECT_NAME := $(notdir $(CURRENT_DIR))
 PARENT_DIR := $(subst /$(PROJECT_NAME),,$(CURRENT_DIR))
 
 # Project Structure
-SOURCE_DIR = src
-TEST_DIR = test
 BUILD_DIR = build
+COVERAGE_DIR = coverage
 REPORT_DIR = report
 RULE_DIR = rule
+SOURCE_DIR = src
+TEST_DIR = test
 
 # Makefile Targets
 TARGET := $(PROJECT_NAME)
@@ -36,6 +37,9 @@ CLANG-TIDY = "/usr/bin/clang-tidy"
 CLANG-CHECK = "/usr/bin/clang-check"
 CPPCHECK = "/usr/bin/cppcheck"
 CPPCHECK_HTML_REPORT = "../cppcheck/htmlreport/cppcheck-htmlreport"
+GCOV = "/usr/bin/gcov"
+LLVM-PROFDATA = "/usr/bin/llvm-profdata"
+LLVM-COV = "/usr/bin/llvm-cov"
 
 # Include Paths
 SYSTEM_LIBS = \
@@ -51,7 +55,7 @@ TEST_INCLUDE_DIRS = \
 # Compiler and Linker Flags
 CC := $(CLANG)
 C_STD = -std=iso9899:1999 #iso9899:2011
-CFLAGS = -Wall -Wextra -Werror -Wshadow -pedantic
+CFLAGS = -Wall -Wextra -Werror -Wshadow -pedantic -g -O0
 LDFLAGS = -lcunit
 
 # Cppcheck Flags
@@ -87,6 +91,11 @@ CLANG-ANALYZE_FLAGS = \
 	-Xanalyzer -analyzer-output=plist \
 	-Xanalyzer -analyzer-output=text \
 
+COVERAGE_FLAGS = -fprofile-instr-generate -fcoverage-mapping
+COVERAGE_PROFRAW := $(COVERAGE_DIR)/default.profraw
+COVERAGE_PROFDATA := $(COVERAGE_DIR)/default.profdata
+COVERAGE_FILES := $(wildcard $(COVERAGE_DIR)/*)
+
 # Reports
 REPORTS := \
 	$(REPORT_DIR)/CUnitAutomated-Results.xml \
@@ -95,27 +104,27 @@ REPORTS := \
 	$(CPPCHECK_REPORT) \
 	$(CPPCHECK_HTML) \
 
-.PHONY: all clean test style tidy cppcheck report check analyze show-%
+.PHONY: all clean test style tidy cppcheck report check analyze coverage show-%
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECT_FILES)
-	$(CC) -o $(TARGET) $(OBJECT_FILES)
+	$(CC) -o $(TARGET) $(OBJECT_FILES) $(COVERAGE_FLAGS)
 
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.c
-	$(CC) $(INCLUDE_DIRS) $(CFLAGS) $(C_STD) -c $< -o $@
+	$(CC) $(INCLUDE_DIRS) $(CFLAGS) $(C_STD) $(COVERAGE_FLAGS) -c $< -o $@
 
 $(TEST_TARGET): $(TEST_OBJECT_FILES) $(OBJECT_FILES)
-	$(CC) -o $(TEST_TARGET) $(TEST_OBJECT_FILES) $(filter-out $(MAIN_OBJ),$(OBJECT_FILES)) $(LDFLAGS)
+	$(CC) -o $(TEST_TARGET) $(TEST_OBJECT_FILES) $(filter-out $(MAIN_OBJ),$(OBJECT_FILES)) $(LDFLAGS) $(COVERAGE_FLAGS)
 
 $(BUILD_DIR)/%.o: $(TEST_DIR)/%.c
-	$(CC) $(INCLUDE_DIRS) $(TEST_INCLUDE_DIRS) $(CFLAGS) $(C_STD) -c $< -o $@
+	$(CC) $(INCLUDE_DIRS) $(TEST_INCLUDE_DIRS) $(CFLAGS) $(C_STD) $(COVERAGE_FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET) $(TEST_TARGET) $(OBJECT_FILES) $(TEST_OBJECT_FILES) $(REPORTS)
+	rm -rf $(TARGET) $(TEST_TARGET) $(OBJECT_FILES) $(TEST_OBJECT_FILES) $(REPORTS) $(COVERAGE_FILES)
 
 test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+	LLVM_PROFILE_FILE="$(COVERAGE_PROFRAW)" ./$(TEST_TARGET)
 
 style: $(SOURCE_FILES) $(HEADER_FILES) $(TEST_SOURCE_FILES) $(TEST_HEADER_FILES)
 	@echo "style has started..."
@@ -147,19 +156,27 @@ report: $(CPPCHECK_XML)
 	$(CPPCHECK_HTML_REPORT) $(CPPCHECK_REPORT_FLAGS)
 	@echo "completed."
 
-check: $(SOURCE_FILES) $(TEST_SOURCE_FILES)
+check:
 	@for src in $(SOURCE_FILES) $(TEST_SOURCE_FILES) ; do \
 		echo "clang-check: $$src" ; \
 		$(CLANG-CHECK) $$src -- -c $(CFLAGS) $(INCLUDE_DIRS) $(TEST_INCLUDE_DIRS) ; \
 	done
 	@echo "completed."
 
-analyze: $(SOURCE_FILES) $(TEST_SOURCE_FILES)
+analyze:
 	@for src in $(SOURCE_FILES) $(TEST_SOURCE_FILES) ; do \
 		echo "clang --analyze: $$src" ; \
 		$(CLANG) --analyze $(CFLAGS) $(INCLUDE_DIRS) $(TEST_INCLUDE_DIRS) "$$src" $(CLANG-ANALYZE_FLAGS) ; \
 	done
 	@echo "completed."
+
+coverage: $(TEST_TARGET)
+	@echo "running tests for coverage..."
+	LLVM_PROFILE_FILE="$(COVERAGE_PROFRAW)" ./$(TEST_TARGET)
+	@echo "generating coverage report..."
+	$(LLVM-PROFDATA) merge -sparse $(COVERAGE_PROFRAW) -o $(COVERAGE_PROFDATA)
+	$(LLVM-COV) show ./$(TEST_TARGET) -instr-profile=$(COVERAGE_PROFDATA) -path-equivalence=$(BUILD_DIR),$(SOURCE_DIR) -output-dir=$(COVERAGE_DIR) -format=html
+	@echo "coverage report generated in $(COVERAGE_DIR)."
 
 show-%:
 	@echo $* = $($*)

@@ -1,3 +1,27 @@
+# -----------------------------------------------------------------------------
+#
+# Binaries
+project_codewars
+test_project_codewars
+#
+# CUnit files
+report/CUnitAutomated-Listing.xml
+report/CUnitAutomated-Results.xml
+#
+# CPPcheck report files
+report/cppcheck.report
+report/cppcheck_errors.xml
+report/html/*
+#
+# Code coverage files
+coverage/default.profraw
+coverage/default.profdata
+coverage/index.html
+coverage/style.css
+coverage/coverage/*
+#
+# -----------------------------------------------------------------------------
+
 # Prerequisites
 *.d
 
